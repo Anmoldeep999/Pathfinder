@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dashboard • Nodes</title>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <div class="brand">Orange Pi Dashboard</div>
+    <nav class="nav">
+      <a href="index.html">Overview</a>
+      <a href="health.html">Healthcheck</a>
+      <a href="pois.html">POI’s</a>
+      <a href="nodes.html">Nodes</a>
+      <button onclick="logout()">Logout</button>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div style="font-weight:800;">Nodes Overview</div>
+        <div class="small">Healthcheck excluded (see SCRUM-24)</div>
+      </div>
+      <div class="small">
+        Last refresh: <span id="lastRefresh">-</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card" style="grid-column: span 12;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <div>
+            <h3 style="margin:0;">All nodes</h3>
+            <div class="muted">Master + beacon devices</div>
+          </div>
+          <button class="btn secondary" id="btnRefresh">Refresh</button>
+        </div>
+
+        <div style="margin-top:10px;">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Name</th><th>Role</th><th>IP</th><th>Location</th></tr>
+            </thead>
+            <tbody id="nodesBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<script src="assets/js/auth.js"></script>
+<script>
+  requireAuth();
+</script>
+
+<script type="module" src="assets/js/nodes.js"></script>
+</body>
+</html>

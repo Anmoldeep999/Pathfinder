@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login • Orange Pi Dashboard</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <main class="login-container">
+    <h1>Admin Login</h1>
+    <p class="small" style="margin-bottom:24px;">Enter your credentials to access the dashboard</p>
+
+    <form id="loginForm" style="display:grid;gap:16px;">
+      <label>
+        <div style="margin-bottom:8px;font-weight:500;">Gebruikersnaam</div>
+        <input id="username" type="text" autocomplete="username" required placeholder="Enter username" />
+      </label>
+
+      <label>
+        <div style="margin-bottom:8px;font-weight:500;">Wachtwoord</div>
+        <input id="password" type="password" autocomplete="current-password" required placeholder="Enter password" />
+      </label>
+
+      <button type="submit" class="btn" style="width:100%;margin-top:8px;">Inloggen</button>
+      <p id="error" style="color:var(--bad);margin:0;display:none;font-size:0.875rem;text-align:center;"></p>
+    </form>
+  </main>
+
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/login.js"></script>
+  
+</body>
+</html>
