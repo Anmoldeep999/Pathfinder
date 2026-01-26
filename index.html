@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dashboard • Overview</title>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <div class="brand">Orange Pi Dashboard</div>
+    <nav class="nav">
+      <a href="index.html">Overview</a>
+      <a href="health.html">Healthcheck</a>
+      <a href="pois.html">POI’s</a>
+      <a href="nodes.html">Nodes</a>
+    </nav>
+    <div class="small" style="margin-top:18px;">
+      UI using mock data (API later)
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div style="font-weight:800;">Overview</div>
+        <div class="small">Quick status of the system</div>
+      </div>
+      <div class="small">
+        Last refresh: <span id="lastRefresh">-</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card" style="grid-column: span 3;">
+        <h3>Beacons online</h3>
+        <div class="kpi" id="kpiOnline">-</div>
+        <div class="muted">Out of 3</div>
+      </section>
+
+      <section class="card" style="grid-column: span 3;">
+        <h3>Offline beacons</h3>
+        <div class="kpi" id="kpiOffline">-</div>
+        <div class="muted" id="offlineNames">-</div>
+      </section>
+
+      <section class="card" style="grid-column: span 3;">
+        <h3>Total POI’s</h3>
+        <div class="kpi" id="kpiPois">-</div>
+        <div class="muted">Points of Interest</div>
+      </section>
+
+      <section class="card" style="grid-column: span 3;">
+        <h3>Total nodes</h3>
+        <div class="kpi" id="kpiNodes">-</div>
+        <div class="muted">Master + beacons</div>
+      </section>
+
+      <section class="card" style="grid-column: span 12;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <h3 style="margin:0;">Beacon status snapshot</h3>
+          <div style="display:flex;gap:10px;">
+            <a class="btn secondary" href="health.html">Open Healthcheck</a>
+            <button class="btn" id="btnRefresh">Refresh</button>
+          </div>
+        </div>
+
+        <div id="beaconRow" class="grid" style="margin-top:12px;"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script type="module" src="assets/js/overview.js"></script>
+</body>
+</html>

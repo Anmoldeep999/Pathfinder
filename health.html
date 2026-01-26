@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dashboard • Healthcheck</title>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <div class="brand">Orange Pi Dashboard</div>
+    <nav class="nav">
+      <a href="index.html">Overview</a>
+      <a href="health.html">Healthcheck</a>
+      <a href="pois.html">POI’s</a>
+      <a href="nodes.html">Nodes</a>
+    </nav>
+    <div class="small" style="margin-top:18px;">
+      Refresh: every 60s (mock)
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div style="font-weight:800;">Healthcheck (Beacons)</div>
+        <div class="small">Master monitors beacon status</div>
+      </div>
+      <div class="small">
+        Last refresh: <span id="lastRefresh">-</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card" style="grid-column: span 12;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <h3 style="margin:0;">Beacon Status</h3>
+          <div style="display:flex;gap:10px;">
+            <button class="btn secondary" id="btnRefresh">Refresh</button>
+            <button class="btn danger" id="btnSimulate">Simuleer outage</button>
+          </div>
+        </div>
+        <div class="small" style="margin-top:6px;">Offline beacon = rood icoon</div>
+        <div id="beaconList" class="grid" style="margin-top:12px;"></div>
+      </section>
+
+      <section class="card" style="grid-column: span 12;">
+        <h3>Outage log</h3>
+        <div class="muted">Laatste 30 events</div>
+        <div style="margin-top:10px;">
+          <table>
+            <thead>
+              <tr><th>Time</th><th>Beacon</th><th>Event</th></tr>
+            </thead>
+            <tbody id="logBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<script type="module" src="assets/js/health.js"></script>
+</body>
+</html>

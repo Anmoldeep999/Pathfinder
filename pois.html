@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dashboard • POI’s</title>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <div class="brand">Orange Pi Dashboard</div>
+    <nav class="nav">
+      <a href="index.html">Overview</a>
+      <a href="health.html">Healthcheck</a>
+      <a href="pois.html">POI’s</a>
+      <a href="nodes.html">Nodes</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div style="font-weight:800;">POI Management</div>
+        <div class="small">Add and remove Points of Interest</div>
+      </div>
+      <div class="small">
+        Last refresh: <span id="lastRefresh">-</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card" style="grid-column: span 12;">
+        <h3>Add POI</h3>
+        <form id="poiForm">
+          <div class="row">
+            <div style="grid-column: span 4;">
+              <label class="small">Name</label>
+              <input id="poiName" required placeholder="e.g. Entrance Door"/>
+            </div>
+            <div style="grid-column: span 4;">
+              <label class="small">Type</label>
+              <input id="poiType" required placeholder="e.g. Door / Room / Zone"/>
+            </div>
+            <div style="grid-column: span 4;">
+              <label class="small">Location</label>
+              <input id="poiLocation" required placeholder="e.g. 2nd floor"/>
+            </div>
+            <div style="grid-column: span 12; display:flex; gap:10px; margin-top:8px;">
+              <button class="btn" type="submit">Add POI</button>
+              <button class="btn secondary" type="button" id="btnSeed">Add demo POI</button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" style="grid-column: span 12;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <div>
+            <h3 style="margin:0;">All POI’s</h3>
+            <div class="muted">Administrators can remove POI’s</div>
+          </div>
+          <button class="btn secondary" id="btnRefresh">Refresh</button>
+        </div>
+
+        <div style="margin-top:10px;">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Name</th><th>Type</th><th>Location</th><th>Action</th></tr>
+            </thead>
+            <tbody id="poiBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<script type="module" src="assets/js/pois.js"></script>
+</body>
+</html>
