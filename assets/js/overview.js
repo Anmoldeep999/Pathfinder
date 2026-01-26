@@ -30,18 +30,25 @@ function beaconMiniCard(b){
 }
 
 async function refresh(){
-  const [beacons, pois, nodes] = await Promise.all([getBeacons(), getPois(), getNodes()]);
-  const onlineCount = beacons.filter(b => b.online).length;
-  const offline = beacons.filter(b => !b.online);
+  try {
+    const [beacons, pois, nodes] = await Promise.all([getBeacons(), getPois(), getNodes()]);
+    const onlineCount = beacons.filter(b => b.online).length;
+    const offline = beacons.filter(b => !b.online);
+    const totalBeacons = beacons.length || 0;
 
-  kpiOnline.textContent = `${onlineCount}/3`;
-  kpiOffline.textContent = `${offline.length}`;
-  offlineNames.textContent = offline.length ? offline.map(b=>b.name).join(", ") : "None 🎉";
-  kpiPois.textContent = `${pois.length}`;
-  kpiNodes.textContent = `${nodes.length}`;
+    kpiOnline.textContent = `${onlineCount}/${totalBeacons}`;
+    kpiOffline.textContent = `${offline.length}`;
+    offlineNames.textContent = offline.length ? offline.map(b=>b.name).join(", ") : "None 🎉";
+    kpiPois.textContent = `${pois.length}`;
+    kpiNodes.textContent = `${nodes.length}`;
 
-  beaconRow.innerHTML = beacons.map(beaconMiniCard).join("");
-  lastRefreshEl.textContent = nowTime();
+    beaconRow.innerHTML = beacons.length 
+      ? beacons.map(beaconMiniCard).join("")
+      : `<div class="card" style="grid-column: span 12;"><div class="small" style="color:#b6c2e2;">No beacons registered yet</div></div>`;
+    lastRefreshEl.textContent = nowTime();
+  } catch (err) {
+    beaconRow.innerHTML = `<div class="card" style="grid-column: span 12;"><div class="small" style="color:var(--bad);">Error: ${err.message}</div></div>`;
+  }
 }
 
 document.getElementById("btnRefresh").addEventListener("click", refresh);

@@ -24,42 +24,51 @@ function renderBeaconCard(b){
 }
 
 async function renderLog(){
-  const log = await getOutageLog();
-  logBody.innerHTML = log.length
-    ? log.map(e => `<tr><td>${e.time}</td><td>${e.beacon}</td><td>${e.event}</td></tr>`).join("")
-    : `<tr><td colspan="3" class="small" style="color:#b6c2e2;">No outages yet</td></tr>`;
+  try {
+    const log = await getOutageLog();
+    logBody.innerHTML = log.length
+      ? log.map(e => `<tr><td>${e.time}</td><td>${e.beacon}</td><td>${e.event}</td></tr>`).join("")
+      : `<tr><td colspan="3" class="small" style="color:#b6c2e2;">No outages yet</td></tr>`;
+  } catch (err) {
+    logBody.innerHTML = `<tr><td colspan="3" class="small" style="color:var(--bad);">Error: ${err.message}</td></tr>`;
+  }
 }
 
 async function refresh(){
-  const beacons = await getBeacons();
-  beaconListEl.innerHTML = beacons.map(renderBeaconCard).join("");
-  lastRefreshEl.textContent = nowTime();
-  await renderLog();
+  try {
+    const beacons = await getBeacons();
+    beaconListEl.innerHTML = beacons.length
+      ? beacons.map(renderBeaconCard).join("")
+      : `<div class="card" style="grid-column: span 12;"><div class="small" style="color:#b6c2e2;">No beacons registered yet</div></div>`;
+    lastRefreshEl.textContent = nowTime();
+    await renderLog();
+  } catch (err) {
+    beaconListEl.innerHTML = `<div class="card" style="grid-column: span 12;"><div class="small" style="color:var(--bad);">Error: ${err.message}</div></div>`;
+  }
 }
 
-// Simuleer dat 1 beacon offline gaat (of terug online)
+// Simulate a beacon going offline/online (toggle status)
 async function simulate(){
-  const beacons = await getBeacons();
-  const pick = beacons[Math.floor(Math.random()*beacons.length)];
-  const newStatus = !pick.online;
+  try {
+    const beacons = await getBeacons();
+    if (beacons.length === 0) {
+      alert("No beacons to simulate. Add beacons first.");
+      return;
+    }
+    
+    const pick = beacons[Math.floor(Math.random()*beacons.length)];
+    const newStatus = !pick.online;
 
-  const result = await setBeaconStatus(pick.id, newStatus);
-  if (!result) return;
-
-  // log alleen wanneer status verandert
-  if (result.prev !== result.current){
-    await addOutageLog({
-      time: nowTime(),
-      beacon: result.beacon.name,
-      event: result.current ? "ONLINE" : "OFFLINE"
-    });
+    await setBeaconStatus(pick.id, newStatus);
+    await refresh();
+  } catch (err) {
+    alert("Error simulating outage: " + err.message);
   }
-  await refresh();
 }
 
 document.getElementById("btnRefresh").addEventListener("click", refresh);
 document.getElementById("btnSimulate").addEventListener("click", simulate);
 
-// Auto refresh elke 60s
+// Auto refresh every 60s
 refresh();
 setInterval(refresh, 60000);

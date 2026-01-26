@@ -2,20 +2,27 @@
 const form = document.getElementById("loginForm");
 const errorEl = document.getElementById("error");
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  errorEl.style.display = "none";
 
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value;
+  const submitBtn = form.querySelector("button[type=submit]");
 
-  const ok = loginMock(username, password);
+  try {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Inloggen...";
 
-  if (!ok) {
-    errorEl.textContent = "Foute login. Probeer: admin / admin123";
+    await login(username, password);
+
+    // Success - redirect to dashboard
+    window.location.href = "index.html";
+  } catch (err) {
+    errorEl.textContent = err.message || "Login mislukt. Controleer je gegevens.";
     errorEl.style.display = "block";
-    return;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Inloggen";
   }
-
-  // na login -> naar dashboard
-  window.location.href = "index.html";
 });
