@@ -66,8 +66,10 @@ async function simulate(){
   }
 }
 
-document.getElementById("btnRefresh").addEventListener("click", refresh);
-document.getElementById("btnSimulate").addEventListener("click", simulate);
+document.getElementById("btnRefresh")?.addEventListener("click", refresh);
+
+const btnSimulate = document.getElementById("btnSimulate");
+if (btnSimulate) btnSimulate.addEventListener("click", simulate);
 
 // Auto refresh every 60s
 refresh();
