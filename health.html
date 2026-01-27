@@ -3,69 +3,81 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Dashboard • Healthcheck</title>
+  <title>Dashboard - Healthcheck</title>
   <link rel="stylesheet" href="assets/css/style.css"/>
+  <script src="assets/js/accessibility-init.js"></script>
 </head>
 <body>
+<!-- Skip Links for keyboard navigation -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-nav" class="skip-link">Skip to navigation</a>
+
 <div class="container">
-  <aside class="sidebar">
-    <div class="brand">Project Pathfinder Dashboard</div>
-    <nav class="nav">
+  <aside class="sidebar" role="complementary" aria-label="Sidebar">
+    <div class="brand" aria-label="Project Pathfinder Dashboard">Project Pathfinder Dashboard</div>
+    <nav class="nav" id="main-nav" aria-label="Main navigation">
       <a href="index.html">Overview</a>
-      <a href="health.html">Healthcheck</a>
-      <a href="pois.html">POI’s</a>
+      <a href="health.html" aria-current="page">Healthcheck</a>
+      <a href="pois.html">POIs</a>
       <a href="nodes.html">Nodes</a>
-      <button onclick="logout()">Logout</button>
+      <a href="account.html">Account</a>
+      <a href="settings.html">Settings</a>
+      <button onclick="logout()" aria-label="Log out of dashboard">Logout</button>
     </nav>
-    <div class="small" style="margin-top:18px;">
+    <div class="small" style="margin-top:18px;" aria-live="polite">
       Refresh: every 60s
     </div>
   </aside>
 
-  <main class="main">
-    <div class="topbar">
+  <main class="main" id="main-content" role="main">
+    <header class="topbar" role="banner">
       <div>
-        <div style="font-weight:800;">Healthcheck (Beacons)</div>
+        <h1 style="font-weight:800;font-size:inherit;margin:0;">Healthcheck (Beacons)</h1>
         <div class="small">Master monitors beacon status</div>
       </div>
       <div class="small">
-        Last refresh: <span id="lastRefresh">-</span>
+        Last refresh: <span id="lastRefresh" aria-live="polite" aria-atomic="true">-</span>
       </div>
-    </div>
+    </header>
 
-    <div class="grid">
-      <section class="card" style="grid-column: span 12;">
+    <div class="grid" role="region" aria-label="Beacon health status">
+      <section class="card" style="grid-column: span 12;" aria-labelledby="beacon-status-heading">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
-          <h3 style="margin:0;">Beacon Status</h3>
+          <h2 id="beacon-status-heading" style="margin:0;" class="h3-style">Beacon Status</h2>
           <div style="display:flex;gap:10px;">
-            <button class="btn secondary" id="btnRefresh">Refresh</button>
+            <button class="btn secondary" id="btnRefresh" aria-label="Refresh beacon status">Refresh</button>
           </div>
         </div>
-        <div id="beaconList" class="grid" style="margin-top:12px;"></div>
+        <div id="beaconList" class="grid" style="margin-top:12px;" role="list" aria-label="List of beacons" aria-live="polite"></div>
       </section>
 
-      <section class="card" style="grid-column: span 12;">
-        <h3>Outage log</h3>
-        <div class="muted">Laatste 30 events</div>
+      <section class="card" style="grid-column: span 12;" aria-labelledby="outage-log-heading">
+        <h2 id="outage-log-heading" class="h3-style">Outage log</h2>
+        <div class="muted">Last 30 events</div>
         <div style="margin-top:10px;">
-          <table>
+          <table role="table" aria-label="Outage history log">
             <thead>
-              <tr><th>Time</th><th>Beacon</th><th>Event</th></tr>
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Beacon</th>
+                <th scope="col">Event</th>
+              </tr>
             </thead>
-            <tbody id="logBody"></tbody>
+            <tbody id="logBody" aria-live="polite"></tbody>
           </table>
         </div>
       </section>
     </div>
-
   </main>
 </div>
+
+<!-- Live region for accessibility announcements -->
+<div id="a11yAnnouncer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
 <script type="module" src="assets/js/health.js"></script>
 <script src="assets/js/auth.js"></script>
 <script>
   requireAuth();
 </script>
-
 </body>
 </html>

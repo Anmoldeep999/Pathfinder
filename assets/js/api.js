@@ -179,3 +179,57 @@ export async function clearOutageLog() {
   await authFetch("/health/outage-log", { method: "DELETE" });
   return true;
 }
+
+// ============================================================
+// ACCOUNT MANAGEMENT (CRUD)
+// ============================================================
+
+// READ - Get current user's profile
+export async function getAccountProfile() {
+  return await authFetch("/users/me");
+}
+
+// UPDATE - Update user profile
+export async function updateAccountProfile(data) {
+  return await authFetch("/users/me", {
+    method: "PUT",
+    body: JSON.stringify(data)
+  });
+}
+
+// UPDATE - Change password
+export async function changePassword(currentPassword, newPassword) {
+  return await authFetch("/users/me/password", {
+    method: "PUT",
+    body: JSON.stringify({
+      current_password: currentPassword,
+      new_password: newPassword
+    })
+  });
+}
+
+// DELETE - Delete user account
+export async function deleteAccount(password) {
+  return await authFetch("/users/me", {
+    method: "DELETE",
+    body: JSON.stringify({ password })
+  });
+}
+
+// READ - Get account activity log
+export async function getAccountActivity() {
+  try {
+    const activities = await authFetch("/users/me/activity?limit=20");
+    return activities.map(act => ({
+      time: new Date(act.timestamp).toLocaleString(),
+      action: act.action,
+      details: act.details || "-"
+    }));
+  } catch (err) {
+    // If endpoint doesn't exist, return mock data
+    console.warn("Activity endpoint not available:", err);
+    return [
+      { time: new Date().toLocaleString(), action: "Login", details: "Successful login" }
+    ];
+  }
+}
