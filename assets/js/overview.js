@@ -9,11 +9,12 @@ const kpiOffline = document.getElementById("kpiOffline");
 const kpiPois = document.getElementById("kpiPois");
 const kpiNodes = document.getElementById("kpiNodes");
 const offlineNames = document.getElementById("offlineNames");
+const unknownAlert = document.getElementById("unknownAlert");
 const beaconRow = document.getElementById("beaconRow");
 
 function beaconMiniCard(b){
-  const badge = statusBadge(b.online);
-  const dotClass = b.online ? "online" : "offline";
+  const badge = statusBadge(b.status);
+  const dotClass = b.status || (b.online ? "online" : "offline");
   return `
     <div class="card" style="grid-column: span 4;">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
@@ -32,15 +33,20 @@ function beaconMiniCard(b){
 async function refresh(){
   try {
     const [beacons, pois, nodes] = await Promise.all([getBeacons(), getPois(), getNodes()]);
-    const onlineCount = beacons.filter(b => b.online).length;
-    const offline = beacons.filter(b => !b.online);
+    const online = beacons.filter(b => b.status === "online");
+    const offline = beacons.filter(b => b.status === "offline");
+    const unknown = beacons.filter(b => b.status === "unknown");
     const totalBeacons = beacons.length || 0;
 
-    kpiOnline.textContent = `${onlineCount}/${totalBeacons}`;
+    // Show ?/total if any beacons are unknown, otherwise show online count
+    kpiOnline.textContent = unknown.length > 0 ? `?/${totalBeacons}` : `${online.length}/${totalBeacons}`;
     kpiOffline.textContent = `${offline.length}`;
     offlineNames.textContent = offline.length ? offline.map(b=>b.name).join(", ") : "None 🎉";
     kpiPois.textContent = `${pois.length}`;
     kpiNodes.textContent = `${nodes.length}`;
+
+    // Show/hide unknown alert
+    unknownAlert.style.display = unknown.length > 0 ? "block" : "none";
 
     beaconRow.innerHTML = beacons.length 
       ? beacons.map(beaconMiniCard).join("")

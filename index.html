@@ -9,7 +9,7 @@
 <body>
 <div class="container">
   <aside class="sidebar">
-    <div class="brand">Orange Pi Dashboard</div>
+    <div class="brand">Project Pathfinder Dashboard</div>
     <nav class="nav">
       <a href="index.html">Overview</a>
       <a href="health.html">Healthcheck</a>
@@ -59,6 +59,7 @@
         <div class="muted">Master + beacons</div>
       </section>
 
+
       <section class="card" style="grid-column: span 12;">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
           <h3 style="margin:0;">Beacon status snapshot</h3>
@@ -69,6 +70,15 @@
         </div>
 
         <div id="beaconRow" class="grid" style="margin-top:12px;"></div>
+      </section>
+      <section id="unknownAlert" class="card" style="grid-column: span 12; display: none; background: rgba(245,158,11,.15); border-color: rgba(245,158,11,.4);">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:1.5rem;">⚠️</span>
+          <div>
+            <div style="font-weight:700;color:#fde68a;">Unknown Beacon Status Detected</div>
+            <div class="small" style="color:#fde68a;">Some beacons have not reported in over a minute. Please check the main controller's state or contact Team Pathfinder.</div>
+          </div>
+        </div>
       </section>
     </div>
   </main>
