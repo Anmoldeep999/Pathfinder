@@ -3,77 +3,83 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Dashboard • Overview</title>
+  <title>Dashboard - Overview</title>
   <link rel="stylesheet" href="assets/css/style.css"/>
+  <script src="assets/js/accessibility-init.js"></script>
 </head>
 <body>
-<div class="container">
-  <aside class="sidebar">
-    <div class="brand">Project Pathfinder Dashboard</div>
-    <nav class="nav">
-      <a href="index.html">Overview</a>
-      <a href="health.html">Healthcheck</a>
-      <a href="pois.html">POI’s</a>
-      <a href="nodes.html">Nodes</a>
-      <button onclick="logout()">Logout</button>
+<!-- Skip Links for keyboard navigation -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-nav" class="skip-link">Skip to navigation</a>
 
+<div class="container">
+  <aside class="sidebar" role="complementary" aria-label="Sidebar">
+    <div class="brand" aria-label="Project Pathfinder Dashboard">Project Pathfinder Dashboard</div>
+    <nav class="nav" id="main-nav" aria-label="Main navigation">
+      <a href="index.html" aria-current="page">Overview</a>
+      <a href="health.html">Healthcheck</a>
+      <a href="pois.html">POIs</a>
+      <a href="nodes.html">Nodes</a>
+      <a href="account.html">Account</a>
+      <a href="settings.html">Settings</a>
+      <button onclick="logout()" aria-label="Log out of dashboard">Logout</button>
     </nav>
-    <div class="small" style="margin-top:18px;">
+    <div class="small" style="margin-top:18px;" aria-live="polite">
       Connected to API
     </div>
   </aside>
 
-  <main class="main">
-    <div class="topbar">
+  <main class="main" id="main-content" role="main">
+    <header class="topbar" role="banner">
       <div>
-        <div style="font-weight:800;">Overview</div>
+        <h1 style="font-weight:800;font-size:inherit;margin:0;">Overview</h1>
         <div class="small">Quick status of the system</div>
       </div>
       <div class="small">
-        Last refresh: <span id="lastRefresh">-</span>
+        Last refresh: <span id="lastRefresh" aria-live="polite" aria-atomic="true">-</span>
       </div>
-    </div>
+    </header>
 
-    <div class="grid"> 
-      <section class="card" style="grid-column: span 3;">
-        <h3>Beacons online</h3>
-        <div class="kpi" id="kpiOnline">-</div>
+    <div class="grid" role="region" aria-label="System statistics">
+      <section class="card" style="grid-column: span 3;" aria-labelledby="beacons-online-heading">
+        <h2 id="beacons-online-heading" class="h3-style">Beacons online</h2>
+        <div class="kpi" id="kpiOnline" aria-live="polite" aria-atomic="true">-</div>
         <div class="muted">Out of 3</div>
       </section>
 
-      <section class="card" style="grid-column: span 3;">
-        <h3>Offline beacons</h3>
-        <div class="kpi" id="kpiOffline">-</div>
-        <div class="muted" id="offlineNames">-</div>
+      <section class="card" style="grid-column: span 3;" aria-labelledby="offline-beacons-heading">
+        <h2 id="offline-beacons-heading" class="h3-style">Offline beacons</h2>
+        <div class="kpi" id="kpiOffline" aria-live="polite" aria-atomic="true">-</div>
+        <div class="muted" id="offlineNames" aria-live="polite">-</div>
       </section>
 
-      <section class="card" style="grid-column: span 3;">
-        <h3>Total POI’s</h3>
-        <div class="kpi" id="kpiPois">-</div>
+      <section class="card" style="grid-column: span 3;" aria-labelledby="total-pois-heading">
+        <h2 id="total-pois-heading" class="h3-style">Total POIs</h2>
+        <div class="kpi" id="kpiPois" aria-live="polite" aria-atomic="true">-</div>
         <div class="muted">Points of Interest</div>
       </section>
 
-      <section class="card" style="grid-column: span 3;">
-        <h3>Total nodes</h3>
-        <div class="kpi" id="kpiNodes">-</div>
+      <section class="card" style="grid-column: span 3;" aria-labelledby="total-nodes-heading">
+        <h2 id="total-nodes-heading" class="h3-style">Total nodes</h2>
+        <div class="kpi" id="kpiNodes" aria-live="polite" aria-atomic="true">-</div>
         <div class="muted">Master + beacons</div>
       </section>
 
-
-      <section class="card" style="grid-column: span 12;">
+      <section class="card" style="grid-column: span 12;" aria-labelledby="beacon-snapshot-heading">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
-          <h3 style="margin:0;">Beacon status snapshot</h3>
+          <h2 id="beacon-snapshot-heading" style="margin:0;" class="h3-style">Beacon status snapshot</h2>
           <div style="display:flex;gap:10px;">
-            <a class="btn secondary" href="health.html">Open Healthcheck</a>
-            <button class="btn" id="btnRefresh">Refresh</button>
+            <a class="btn secondary" href="health.html" aria-label="Open detailed healthcheck page">Open Healthcheck</a>
+            <button class="btn" id="btnRefresh" aria-label="Refresh beacon status data">Refresh</button>
           </div>
         </div>
 
-        <div id="beaconRow" class="grid" style="margin-top:12px;"></div>
+        <div id="beaconRow" class="grid" style="margin-top:12px;" role="list" aria-label="Beacon status cards" aria-live="polite"></div>
       </section>
-      <section id="unknownAlert" class="card" style="grid-column: span 12; display: none; background: rgba(245,158,11,.15); border-color: rgba(245,158,11,.4);">
+
+      <section id="unknownAlert" class="card" style="grid-column: span 12; display: none; background: rgba(245,158,11,.15); border-color: rgba(245,158,11,.4);" role="alert" aria-live="assertive">
         <div style="display:flex;align-items:center;gap:12px;">
-          <span style="font-size:1.5rem;">⚠️</span>
+          <span style="font-size:1.5rem;" aria-hidden="true">&#9888;</span>
           <div>
             <div style="font-weight:700;color:#fde68a;">Unknown Beacon Status Detected</div>
             <div class="small" style="color:#fde68a;">Some beacons have not reported in over a minute. Please check the main controller's state or contact Team Pathfinder.</div>
@@ -83,6 +89,10 @@
     </div>
   </main>
 </div>
+
+<!-- Live region for accessibility announcements -->
+<div id="a11yAnnouncer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
 <script src="assets/js/auth.js"></script>
 <script>
   requireAuth();

@@ -1,6 +1,15 @@
 // assets/js/login.js
 const form = document.getElementById("loginForm");
 const errorEl = document.getElementById("error");
+const a11yAnnouncer = document.getElementById("a11yAnnouncer");
+
+// Announce to screen readers
+function announce(message) {
+  if (a11yAnnouncer) {
+    a11yAnnouncer.textContent = message;
+    setTimeout(() => { a11yAnnouncer.textContent = ""; }, 1000);
+  }
+}
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -12,17 +21,25 @@ form.addEventListener("submit", async (e) => {
 
   try {
     submitBtn.disabled = true;
-    submitBtn.textContent = "Inloggen...";
+    submitBtn.textContent = "Logging in...";
+    submitBtn.setAttribute("aria-busy", "true");
+    announce("Logging in, please wait...");
 
     await login(username, password);
 
     // Success - redirect to dashboard
+    announce("Login successful. Redirecting to dashboard.");
     window.location.href = "index.html";
   } catch (err) {
-    errorEl.textContent = err.message || "Login mislukt. Controleer je gegevens.";
+    const errorMessage = err.message || "Login failed. Please check your credentials.";
+    errorEl.textContent = errorMessage;
     errorEl.style.display = "block";
+    // Error element has role="alert" so it will be announced automatically
+    // Focus the username field for retry
+    document.getElementById("username").focus();
   } finally {
     submitBtn.disabled = false;
-    submitBtn.textContent = "Inloggen";
+    submitBtn.textContent = "Log in";
+    submitBtn.setAttribute("aria-busy", "false");
   }
 });

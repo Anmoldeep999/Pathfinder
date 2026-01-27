@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dashboard - Settings</title>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <script src="assets/js/accessibility-init.js"></script>
+</head>
+<body>
+<!-- Skip Links for keyboard navigation -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-nav" class="skip-link">Skip to navigation</a>
+
+<div class="container">
+  <aside class="sidebar" role="complementary" aria-label="Sidebar">
+    <div class="brand" aria-label="Project Pathfinder Dashboard">Project Pathfinder Dashboard</div>
+    <nav class="nav" id="main-nav" aria-label="Main navigation">
+      <a href="index.html">Overview</a>
+      <a href="health.html">Healthcheck</a>
+      <a href="pois.html">POIs</a>
+      <a href="nodes.html">Nodes</a>
+      <a href="account.html">Account</a>
+      <a href="settings.html" aria-current="page">Settings</a>
+      <button onclick="logout()" aria-label="Log out of dashboard">Logout</button>
+    </nav>
+  </aside>
+
+  <main class="main" id="main-content" role="main">
+    <header class="topbar" role="banner">
+      <div>
+        <h1 style="font-weight:800;font-size:inherit;margin:0;">Settings</h1>
+        <div class="small">Customize your experience and accessibility preferences</div>
+      </div>
+    </header>
+
+    <div class="grid" role="region" aria-label="Settings panels">
+      <!-- Accessibility Settings Card -->
+      <section class="card" style="grid-column: span 6;" aria-labelledby="accessibility-heading">
+        <h2 id="accessibility-heading" class="h3-style">Accessibility</h2>
+        <div class="muted">Visual and motion preferences for better accessibility</div>
+        
+        <div class="settings-group" style="margin-top:20px;" role="group" aria-labelledby="accessibility-heading">
+          <!-- High Contrast Mode -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <label for="highContrast" class="setting-label">High Contrast Mode</label>
+              <span class="setting-description" id="highContrastDesc">Increases contrast for better visibility and readability</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="highContrast" aria-describedby="highContrastDesc"/>
+              <span class="toggle-slider" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <!-- Reduced Motion -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <label for="reducedMotion" class="setting-label">Reduced Motion</label>
+              <span class="setting-description" id="reducedMotionDesc">Minimize animations and transitions</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="reducedMotion" aria-describedby="reducedMotionDesc"/>
+              <span class="toggle-slider" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <!-- Large Text -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <label for="largeText" class="setting-label">Large Text</label>
+              <span class="setting-description" id="largeTextDesc">Increase text size throughout the application</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="largeText" aria-describedby="largeTextDesc"/>
+              <span class="toggle-slider" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <!-- Focus Indicators -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <label for="focusIndicators" class="setting-label">Enhanced Focus Indicators</label>
+              <span class="setting-description" id="focusIndicatorsDesc">Show more visible focus outlines for keyboard navigation</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="focusIndicators" aria-describedby="focusIndicatorsDesc"/>
+              <span class="toggle-slider" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Display Settings Card -->
+      <section class="card" style="grid-column: span 6;" aria-labelledby="display-heading">
+        <h2 id="display-heading" class="h3-style">Display</h2>
+        <div class="muted">Customize the appearance of the dashboard</div>
+        
+        <div class="settings-group" style="margin-top:20px;" role="group" aria-labelledby="display-heading">
+          <!-- Color Theme -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <label for="colorTheme" class="setting-label">Color Theme</label>
+              <span class="setting-description" id="colorThemeDesc">Choose your preferred color scheme</span>
+            </div>
+            <select id="colorTheme" class="setting-select" aria-describedby="colorThemeDesc">
+              <option value="default">Default (Dark Blue)</option>
+              <option value="darker">Darker</option>
+              <option value="midnight">Midnight</option>
+            </select>
+          </div>
+
+          <!-- Font Size -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <label for="fontSize" class="setting-label">Font Size</label>
+              <span class="setting-description" id="fontSizeDesc">Adjust the base font size</span>
+            </div>
+            <select id="fontSize" class="setting-select" aria-describedby="fontSizeDesc">
+              <option value="small">Small (14px)</option>
+              <option value="medium">Medium (16px)</option>
+              <option value="large">Large (18px)</option>
+              <option value="xlarge">Extra Large (20px)</option>
+            </select>
+          </div>
+
+          <!-- Dyslexia-Friendly Font -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <label for="dyslexiaFont" class="setting-label">Dyslexia-Friendly Font</label>
+              <span class="setting-description" id="dyslexiaFontDesc">Use a font designed for easier reading</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="dyslexiaFont" aria-describedby="dyslexiaFontDesc"/>
+              <span class="toggle-slider" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen Reader Settings Card -->
+      <section class="card" style="grid-column: span 6;" aria-labelledby="screenreader-heading">
+        <h2 id="screenreader-heading" class="h3-style">Screen Reader Support</h2>
+        <div class="muted">Options to improve screen reader experience</div>
+        
+        <div class="settings-group" style="margin-top:20px;" role="group" aria-labelledby="screenreader-heading">
+          <!-- Announce Updates -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <label for="announceUpdates" class="setting-label">Announce Live Updates</label>
+              <span class="setting-description" id="announceUpdatesDesc">Announce status changes to screen readers</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="announceUpdates" checked aria-describedby="announceUpdatesDesc"/>
+              <span class="toggle-slider" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Keyboard Navigation Card -->
+      <section class="card" style="grid-column: span 6;" aria-labelledby="keyboard-heading">
+        <h2 id="keyboard-heading" class="h3-style">Keyboard Navigation</h2>
+        <div class="muted">Customize keyboard shortcuts and navigation</div>
+        
+        <div class="settings-group" style="margin-top:20px;" role="group" aria-labelledby="keyboard-heading">
+          <!-- Skip Links -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <label for="skipLinks" class="setting-label">Show Skip Links</label>
+              <span class="setting-description" id="skipLinksDesc">Display skip navigation links on focus</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="skipLinks" checked aria-describedby="skipLinksDesc"/>
+              <span class="toggle-slider" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <!-- Keyboard Shortcuts -->
+          <div class="setting-item">
+            <div class="setting-info">
+              <label for="keyboardShortcuts" class="setting-label">Enable Keyboard Shortcuts</label>
+              <span class="setting-description" id="keyboardShortcutsDesc">Use keyboard shortcuts for quick navigation</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="keyboardShortcuts" checked aria-describedby="keyboardShortcutsDesc"/>
+              <span class="toggle-slider" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;padding:16px;background:rgba(96,165,250,.1);border-radius:10px;border:1px solid rgba(96,165,250,.2);" role="region" aria-labelledby="shortcuts-info-heading">
+          <h3 id="shortcuts-info-heading" style="font-weight:600;margin:0 0 8px 0;font-size:1rem;">Keyboard Shortcuts</h3>
+          <div class="small" style="display:grid;gap:4px;">
+            <div><kbd>Alt</kbd> + <kbd>1</kbd> - Go to Overview</div>
+            <div><kbd>Alt</kbd> + <kbd>2</kbd> - Go to Healthcheck</div>
+            <div><kbd>Alt</kbd> + <kbd>3</kbd> - Go to POIs</div>
+            <div><kbd>Alt</kbd> + <kbd>4</kbd> - Go to Nodes</div>
+            <div><kbd>Alt</kbd> + <kbd>5</kbd> - Go to Account</div>
+            <div><kbd>Alt</kbd> + <kbd>6</kbd> - Go to Settings</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Actions Card -->
+      <section class="card" style="grid-column: span 12;" aria-labelledby="actions-heading">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+          <div>
+            <h2 id="actions-heading" style="margin:0;" class="h3-style">Settings Actions</h2>
+            <div class="muted">Save or reset your preferences</div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn secondary" id="btnResetSettings" aria-label="Reset all settings to default values">Reset to Defaults</button>
+            <button class="btn" id="btnSaveSettings" aria-label="Save current settings">Save Settings</button>
+          </div>
+        </div>
+        <div id="settingsMessage" role="status" aria-live="polite" style="margin-top:12px;"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- Live region for accessibility announcements -->
+<div id="a11yAnnouncer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+<script src="assets/js/auth.js"></script>
+<script>
+  requireAuth();
+</script>
+<script type="module" src="assets/js/settings.js"></script>
+</body>
+</html>

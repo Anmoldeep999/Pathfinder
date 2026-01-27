@@ -5,6 +5,15 @@ setActiveNav();
 
 const lastRefreshEl = document.getElementById("lastRefresh");
 const nodesBody = document.getElementById("nodesBody");
+const a11yAnnouncer = document.getElementById("a11yAnnouncer");
+
+// Announce to screen readers
+function announce(message) {
+  if (a11yAnnouncer) {
+    a11yAnnouncer.textContent = message;
+    setTimeout(() => { a11yAnnouncer.textContent = ""; }, 1000);
+  }
+}
 
 function row(n){
   return `
@@ -25,11 +34,16 @@ async function render(){
       ? nodes.map(row).join("")
       : `<tr><td colspan="5" class="small" style="color:#b6c2e2;">No nodes found</td></tr>`;
     lastRefreshEl.textContent = nowTime();
+    announce(`Nodes list loaded. ${nodes.length} nodes total.`);
   } catch (err) {
     nodesBody.innerHTML = `<tr><td colspan="5" class="small" style="color:var(--bad);">Error: ${err.message}</td></tr>`;
+    announce(`Error loading nodes: ${err.message}`);
   }
 }
 
-document.getElementById("btnRefresh").addEventListener("click", render);
+document.getElementById("btnRefresh").addEventListener("click", () => {
+  announce("Refreshing nodes list...");
+  render();
+});
 
 render();

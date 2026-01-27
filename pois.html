@@ -3,80 +3,99 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Dashboard • POI’s</title>
+  <title>Dashboard - POIs</title>
   <link rel="stylesheet" href="assets/css/style.css"/>
+  <script src="assets/js/accessibility-init.js"></script>
 </head>
 <body>
+<!-- Skip Links for keyboard navigation -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-nav" class="skip-link">Skip to navigation</a>
+
 <div class="container">
-  <aside class="sidebar">
-    <div class="brand">Project Pathfinder Dashboard</div>
-    <nav class="nav">
+  <aside class="sidebar" role="complementary" aria-label="Sidebar">
+    <div class="brand" aria-label="Project Pathfinder Dashboard">Project Pathfinder Dashboard</div>
+    <nav class="nav" id="main-nav" aria-label="Main navigation">
       <a href="index.html">Overview</a>
       <a href="health.html">Healthcheck</a>
-      <a href="pois.html">POI’s</a>
+      <a href="pois.html" aria-current="page">POIs</a>
       <a href="nodes.html">Nodes</a>
-      <button onclick="logout()">Logout</button>
+      <a href="account.html">Account</a>
+      <a href="settings.html">Settings</a>
+      <button onclick="logout()" aria-label="Log out of dashboard">Logout</button>
     </nav>
   </aside>
 
-  <main class="main">
-    <div class="topbar">
+  <main class="main" id="main-content" role="main">
+    <header class="topbar" role="banner">
       <div>
-        <div style="font-weight:800;">POI Management</div>
+        <h1 style="font-weight:800;font-size:inherit;margin:0;">POI Management</h1>
         <div class="small">Add and remove Points of Interest</div>
       </div>
       <div class="small">
-        Last refresh: <span id="lastRefresh">-</span>
+        Last refresh: <span id="lastRefresh" aria-live="polite" aria-atomic="true">-</span>
       </div>
-    </div>
+    </header>
 
-    <div class="grid">
-      <section class="card" style="grid-column: span 12;">
-        <h3>Add POI</h3>
-        <form id="poiForm">
+    <div class="grid" role="region" aria-label="POI management">
+      <section class="card" style="grid-column: span 12;" aria-labelledby="add-poi-heading">
+        <h2 id="add-poi-heading" class="h3-style">Add POI</h2>
+        <form id="poiForm" aria-label="Add new Point of Interest">
           <div class="row">
             <div style="grid-column: span 4;">
-              <label class="small">Name</label>
-              <input id="poiName" required placeholder="e.g. Entrance Door"/>
+              <label for="poiName" class="small">Name</label>
+              <input id="poiName" required placeholder="e.g. Entrance Door" aria-describedby="poiNameHelp"/>
+              <span id="poiNameHelp" class="sr-only">Enter a descriptive name for the Point of Interest</span>
             </div>
             <div style="grid-column: span 4;">
-              <label class="small">Type</label>
-              <input id="poiType" required placeholder="e.g. Door / Room / Zone"/>
+              <label for="poiType" class="small">Type</label>
+              <input id="poiType" required placeholder="e.g. Door / Room / Zone" aria-describedby="poiTypeHelp"/>
+              <span id="poiTypeHelp" class="sr-only">Specify the type of location</span>
             </div>
             <div style="grid-column: span 4;">
-              <label class="small">Location</label>
-              <input id="poiLocation" required placeholder="e.g. 2nd floor"/>
+              <label for="poiLocation" class="small">Location</label>
+              <input id="poiLocation" required placeholder="e.g. 2nd floor" aria-describedby="poiLocationHelp"/>
+              <span id="poiLocationHelp" class="sr-only">Describe where this POI is located</span>
             </div>
             <div style="grid-column: span 12; display:flex; gap:10px; margin-top:8px;">
-              <button class="btn" type="submit">Add POI</button>
-              <button class="btn secondary" type="button" id="btnSeed">Add demo POI</button>
+              <button class="btn" type="submit" aria-label="Add new Point of Interest">Add POI</button>
+              <button class="btn secondary" type="button" id="btnSeed" aria-label="Add a demonstration POI with sample data">Add demo POI</button>
             </div>
           </div>
         </form>
       </section>
 
-      <section class="card" style="grid-column: span 12;">
+      <section class="card" style="grid-column: span 12;" aria-labelledby="all-pois-heading">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
           <div>
-            <h3 style="margin:0;">All POI’s</h3>
-            <div class="muted">Administrators can remove POI’s</div>
+            <h2 id="all-pois-heading" style="margin:0;" class="h3-style">All POIs</h2>
+            <div class="muted">Administrators can remove POIs</div>
           </div>
-          <button class="btn secondary" id="btnRefresh">Refresh</button>
+          <button class="btn secondary" id="btnRefresh" aria-label="Refresh POI list">Refresh</button>
         </div>
 
         <div style="margin-top:10px;">
-          <table>
+          <table role="table" aria-label="List of all Points of Interest">
             <thead>
-              <tr><th>ID</th><th>Name</th><th>Type</th><th>Location</th><th>Action</th></tr>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Location</th>
+                <th scope="col">Action</th>
+              </tr>
             </thead>
-            <tbody id="poiBody"></tbody>
+            <tbody id="poiBody" aria-live="polite"></tbody>
           </table>
         </div>
       </section>
     </div>
-
   </main>
 </div>
+
+<!-- Live region for accessibility announcements -->
+<div id="a11yAnnouncer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
 <script src="assets/js/auth.js"></script>
 <script>
   requireAuth();

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dashboard - Account</title>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <script src="assets/js/accessibility-init.js"></script>
+</head>
+<body>
+<!-- Skip Links for keyboard navigation -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-nav" class="skip-link">Skip to navigation</a>
+
+<div class="container">
+  <aside class="sidebar" role="complementary" aria-label="Sidebar">
+    <div class="brand" aria-label="Project Pathfinder Dashboard">Project Pathfinder Dashboard</div>
+    <nav class="nav" id="main-nav" aria-label="Main navigation">
+      <a href="index.html">Overview</a>
+      <a href="health.html">Healthcheck</a>
+      <a href="pois.html">POIs</a>
+      <a href="nodes.html">Nodes</a>
+      <a href="account.html" aria-current="page">Account</a>
+      <a href="settings.html">Settings</a>
+      <button onclick="logout()" aria-label="Log out of dashboard">Logout</button>
+    </nav>
+  </aside>
+
+  <main class="main" id="main-content" role="main">
+    <header class="topbar" role="banner">
+      <div>
+        <h1 style="font-weight:800;font-size:inherit;margin:0;">Account Settings</h1>
+        <div class="small">Manage your account information</div>
+      </div>
+      <div class="small">
+        Logged in as: <span id="currentUser" aria-live="polite">-</span>
+      </div>
+    </header>
+
+    <div class="grid" role="region" aria-label="Account management">
+      <!-- Profile Information Card -->
+      <section class="card" style="grid-column: span 6;" aria-labelledby="profile-heading">
+        <h2 id="profile-heading" class="h3-style">Profile Information</h2>
+        <div class="muted">View and update your profile details</div>
+        <form id="profileForm" style="margin-top:16px;" aria-label="Update profile information">
+          <div style="display:block;margin-bottom:16px;">
+            <label for="username" style="font-weight:500;display:block;margin-bottom:6px;">Username</label>
+            <input type="text" id="username" readonly aria-describedby="usernameHelp" style="opacity:0.7;cursor:not-allowed;"/>
+            <span id="usernameHelp" class="sr-only">Username cannot be changed</span>
+          </div>
+          <div style="display:block;margin-bottom:16px;">
+            <label for="email" style="font-weight:500;display:block;margin-bottom:6px;">Email</label>
+            <input type="email" id="email" placeholder="your@email.com" aria-describedby="emailHelp"/>
+            <span id="emailHelp" class="sr-only">Enter your email address</span>
+          </div>
+          <div style="display:block;margin-bottom:16px;">
+            <label for="fullName" style="font-weight:500;display:block;margin-bottom:6px;">Full Name</label>
+            <input type="text" id="fullName" placeholder="Your full name" aria-describedby="fullNameHelp"/>
+            <span id="fullNameHelp" class="sr-only">Enter your full name</span>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:20px;">
+            <button type="submit" class="btn" aria-label="Save profile changes">Update Profile</button>
+            <button type="button" class="btn secondary" id="btnRefreshProfile" aria-label="Reload profile data">Refresh</button>
+          </div>
+        </form>
+        <div id="profileMessage" role="status" aria-live="polite" style="margin-top:12px;"></div>
+      </section>
+
+      <!-- Change Password Card -->
+      <section class="card" style="grid-column: span 6;" aria-labelledby="password-heading">
+        <h2 id="password-heading" class="h3-style">Change Password</h2>
+        <div class="muted">Update your account password</div>
+        <form id="passwordForm" style="margin-top:16px;" aria-label="Change password">
+          <div style="display:block;margin-bottom:16px;">
+            <label for="currentPassword" style="font-weight:500;display:block;margin-bottom:6px;">Current Password</label>
+            <input type="password" id="currentPassword" placeholder="Enter current password" required autocomplete="current-password"/>
+          </div>
+          <div style="display:block;margin-bottom:16px;">
+            <label for="newPassword" style="font-weight:500;display:block;margin-bottom:6px;">New Password</label>
+            <input type="password" id="newPassword" placeholder="Enter new password" required autocomplete="new-password" aria-describedby="newPasswordHelp"/>
+            <span id="newPasswordHelp" class="sr-only">Password must be at least 6 characters</span>
+          </div>
+          <div style="display:block;margin-bottom:16px;">
+            <label for="confirmPassword" style="font-weight:500;display:block;margin-bottom:6px;">Confirm New Password</label>
+            <input type="password" id="confirmPassword" placeholder="Confirm new password" required autocomplete="new-password"/>
+          </div>
+          <button type="submit" class="btn" aria-label="Change password">Change Password</button>
+        </form>
+        <div id="passwordMessage" role="status" aria-live="polite" style="margin-top:12px;"></div>
+      </section>
+
+      <!-- Account Actions Card -->
+      <section class="card" style="grid-column: span 12;" aria-labelledby="actions-heading">
+        <h2 id="actions-heading" class="h3-style">Account Actions</h2>
+        <div class="muted">Danger zone - these actions cannot be undone</div>
+        <div style="margin-top:20px;display:flex;gap:16px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:280px;padding:20px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:12px;" role="region" aria-labelledby="delete-account-label">
+            <h3 id="delete-account-label" style="margin:0 0 8px 0;color:#ffd0d0;">Delete Account</h3>
+            <p class="muted" style="margin:0 0 16px 0;">Permanently delete your account and all associated data. This action cannot be reversed.</p>
+            <button class="btn danger" id="btnDeleteAccount" aria-describedby="delete-account-label">Delete My Account</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Account Activity Card -->
+      <section class="card" style="grid-column: span 12;" aria-labelledby="activity-heading">
+        <h2 id="activity-heading" class="h3-style">Account Activity</h2>
+        <div class="muted">Recent activity on your account</div>
+        <div style="margin-top:10px;">
+          <table role="table" aria-label="Account activity history">
+            <thead>
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Action</th>
+                <th scope="col">Details</th>
+              </tr>
+            </thead>
+            <tbody id="activityBody" aria-live="polite">
+              <tr><td colspan="3" class="muted" style="text-align:center;">Loading activity...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- Delete Account Confirmation Modal -->
+<div id="deleteModal" role="dialog" aria-labelledby="delete-modal-title" aria-describedby="delete-modal-desc" aria-modal="true" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:linear-gradient(145deg, rgba(15,26,51,.95), rgba(16,31,61,.98));border:1px solid var(--line);border-radius:16px;padding:30px;max-width:450px;width:90%;box-shadow:var(--shadow);">
+    <h2 id="delete-modal-title" style="margin:0 0 12px 0;color:#ffd0d0;">Confirm Account Deletion</h2>
+    <p id="delete-modal-desc" class="muted" style="margin:0 0 20px 0;">This action is permanent and cannot be undone. All your data will be permanently deleted.</p>
+    <div style="display:block;margin-bottom:20px;">
+      <label for="deleteConfirmPassword" style="font-weight:500;display:block;margin-bottom:6px;">Enter your password to confirm:</label>
+      <input type="password" id="deleteConfirmPassword" placeholder="Your password" autocomplete="current-password"/>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="btn secondary" id="btnCancelDelete" aria-label="Cancel account deletion">Cancel</button>
+      <button class="btn danger" id="btnConfirmDelete" aria-label="Permanently delete account">Delete Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- Live region for accessibility announcements -->
+<div id="a11yAnnouncer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+<script src="assets/js/auth.js"></script>
+<script>
+  requireAuth();
+</script>
+<script type="module" src="assets/js/account.js"></script>
+</body>
+</html>
