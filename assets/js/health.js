@@ -8,8 +8,8 @@ const beaconListEl = document.getElementById("beaconList");
 const logBody = document.getElementById("logBody");
 
 function renderBeaconCard(b){
-  const iconClass = b.online ? "online" : "offline";
-  const badge = statusBadge(b.online);
+  const iconClass = b.status || (b.online ? "online" : "offline");
+  const badge = statusBadge(b.status);
 
   return `
     <div class="card" style="grid-column: span 4;">

@@ -48,17 +48,32 @@ async function authFetch(endpoint, options = {}) {
 export async function getBeacons() {
   const beacons = await authFetch("/beacons/");
   // Map backend format to frontend format
-  return beacons.map(b => ({
-    id: b.id,
-    name: b.name,
-    ip: b.ip || "N/A",
-    online: b.status === "ONLINE",
-    lastSeen: b.last_heartbeat ? new Date(b.last_heartbeat).toLocaleString() : "Never",
-    x: b.x,
-    y: b.y,
-    role: b.role || "Beacon",
-    location: b.location || ""
-  }));
+  return beacons.map(b => {
+    const lastHeartbeat = b.last_heartbeat ? new Date(b.last_heartbeat) : null;
+    const now = new Date();
+    const oneMinuteAgo = new Date(now.getTime() - 60 * 1000);
+    
+    // Determine status: 'unknown' if last seen > 1 minute ago
+    let status;
+    if (!lastHeartbeat || lastHeartbeat < oneMinuteAgo) {
+      status = "unknown";
+    } else {
+      status = b.status === "ONLINE" ? "online" : "offline";
+    }
+    
+    return {
+      id: b.id,
+      name: b.name,
+      ip: b.ip || "N/A",
+      online: status === "online",
+      status: status,
+      lastSeen: lastHeartbeat ? lastHeartbeat.toLocaleString() : "Never",
+      x: b.x,
+      y: b.y,
+      role: b.role || "Beacon",
+      location: b.location || ""
+    };
+  });
 }
 
 export async function setBeaconStatus(beaconId, online) {
