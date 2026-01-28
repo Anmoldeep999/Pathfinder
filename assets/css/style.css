@@ -179,7 +179,6 @@ a{color:inherit; text-decoration:none}
 }
 .online{background:var(--good)}
 .offline{background:var(--bad)}
-.unknown{background:#f59e0b}
 .badge{
   padding:6px 12px; border-radius:999px; font-size:0.75rem; font-weight:700;
   border:1px solid var(--line);
@@ -187,7 +186,6 @@ a{color:inherit; text-decoration:none}
 }
 .badge.good{background:rgba(34,197,94,.2); color:#bff5d1; border-color:rgba(34,197,94,.4)}
 .badge.bad{background:rgba(239,68,68,.2); color:#ffd0d0; border-color:rgba(239,68,68,.4)}
-.badge.unknown{background:rgba(245,158,11,.2); color:#fde68a; border-color:rgba(245,158,11,.4)}
 
 /* Tables */
 table{
@@ -343,18 +341,6 @@ input:focus, select:focus{
   bottom:-2px;
   border-radius:50%;
   background:var(--bad);
-  opacity:0.3;
-  z-index:-1;
-}
-.status-dot.unknown::after {
-  content:"";
-  position:absolute;
-  top:-2px;
-  left:-2px;
-  right:-2px;
-  bottom:-2px;
-  border-radius:50%;
-  background:#f59e0b;
   opacity:0.3;
   z-index:-1;
 }
@@ -620,12 +606,6 @@ html.high-contrast .badge.bad {
   background:#000000;
   color:#ff0000;
   border:2px solid #ff0000;
-}
-
-html.high-contrast .badge.unknown {
-  background:#000000;
-  color:#ffff00;
-  border:2px solid #ffff00;
 }
 
 /* Reduced Motion */

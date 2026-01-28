@@ -50,16 +50,7 @@ export async function getBeacons() {
   // Map backend format to frontend format
   return beacons.map(b => {
     const lastHeartbeat = b.last_heartbeat ? new Date(b.last_heartbeat) : null;
-    const now = new Date();
-    const oneMinuteAgo = new Date(now.getTime() - 60 * 1000);
-    
-    // Determine status: 'unknown' if last seen > 1 minute ago
-    let status;
-    if (!lastHeartbeat || lastHeartbeat < oneMinuteAgo) {
-      status = "unknown";
-    } else {
-      status = b.status === "ONLINE" ? "online" : "offline";
-    }
+    const status = b.status === "ONLINE" ? "online" : "offline";
     
     return {
       id: b.id,

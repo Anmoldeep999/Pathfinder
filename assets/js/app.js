@@ -14,8 +14,6 @@ export function nowTime() {
 export function statusBadge(status){
   if (status === "online" || status === true) {
     return `<span class="badge good"><span class="status-dot online"></span>ONLINE</span>`;
-  } else if (status === "unknown") {
-    return `<span class="badge unknown"><span class="status-dot unknown"></span>UNKNOWN</span>`;
   } else {
     return `<span class="badge bad"><span class="status-dot offline"></span>OFFLINE</span>`;
   }

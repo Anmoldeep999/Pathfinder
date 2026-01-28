@@ -9,7 +9,6 @@ const kpiOffline = document.getElementById("kpiOffline");
 const kpiPois = document.getElementById("kpiPois");
 const kpiNodes = document.getElementById("kpiNodes");
 const offlineNames = document.getElementById("offlineNames");
-const unknownAlert = document.getElementById("unknownAlert");
 const beaconRow = document.getElementById("beaconRow");
 const a11yAnnouncer = document.getElementById("a11yAnnouncer");
 
@@ -50,8 +49,6 @@ function detectAndAnnounceChanges(beacons) {
         changes.push(`Alert: ${beacon.name} has gone offline!`);
       } else if (currentStatus === "online" && previousStatus === "offline") {
         changes.push(`${beacon.name} is back online.`);
-      } else if (currentStatus === "unknown") {
-        changes.push(`Warning: ${beacon.name} status is now unknown.`);
       }
     }
     
@@ -86,18 +83,13 @@ async function refresh(){
     const [beacons, pois, nodes] = await Promise.all([getBeacons(), getPois(), getNodes()]);
     const online = beacons.filter(b => b.status === "online");
     const offline = beacons.filter(b => b.status === "offline");
-    const unknown = beacons.filter(b => b.status === "unknown");
     const totalBeacons = beacons.length || 0;
 
-    // Show ?/total if any beacons are unknown, otherwise show online count
-    kpiOnline.textContent = unknown.length > 0 ? `?/${totalBeacons}` : `${online.length}/${totalBeacons}`;
+    kpiOnline.textContent = `${online.length}/${totalBeacons}`;
     kpiOffline.textContent = `${offline.length}`;
     offlineNames.textContent = offline.length ? offline.map(b=>b.name).join(", ") : "None";
     kpiPois.textContent = `${pois.length}`;
     kpiNodes.textContent = `${nodes.length}`;
-
-    // Show/hide unknown alert
-    unknownAlert.style.display = unknown.length > 0 ? "block" : "none";
 
     beaconRow.innerHTML = beacons.length 
       ? beacons.map(beaconMiniCard).join("")
