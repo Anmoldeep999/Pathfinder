@@ -27,6 +27,7 @@
     </div>
 
     <button type="submit" class="btn" style="width:100%;margin-top:8px;" aria-label="Log in to dashboard">Log in</button>
+    <button type="button" class="btn secondary" style="width:100%;" id="forgotPasswordBtn" aria-label="Request password reset via email">Forgot Password</button>
     <p id="error" role="alert" aria-live="assertive" style="color:var(--bad);margin:0;display:none;font-size:0.875rem;text-align:center;"></p>
   </form>
 </main>
@@ -36,5 +37,29 @@
 
 <script src="assets/js/auth.js"></script>
 <script src="assets/js/login.js"></script>
+<script>
+  document.getElementById("forgotPasswordBtn").addEventListener("click", function() {
+    const username = document.getElementById("username").value.trim();
+    if (!username) {
+      const errorEl = document.getElementById("error");
+      errorEl.textContent = "Please enter your username first";
+      errorEl.style.display = "block";
+      document.getElementById("username").focus();
+      return;
+    }
+    
+    const email = "info@lakke.be";
+    const subject = encodeURIComponent("Pathfinder: Password change request");
+    const body = encodeURIComponent(`Hello,
+
+I would like to request a password reset for my Pathfinder account.
+
+Username: ${username}
+
+Thank you.`);
+    
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  });
+</script>
 </body>
 </html>
