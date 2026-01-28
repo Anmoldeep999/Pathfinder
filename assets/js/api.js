@@ -59,6 +59,7 @@ export async function getBeacons() {
       online: status === "online",
       status: status,
       lastSeen: lastHeartbeat ? lastHeartbeat.toLocaleString() : "Never",
+      lastHeartbeatDate: lastHeartbeat,
       x: b.x,
       y: b.y,
       role: b.role || "Beacon",

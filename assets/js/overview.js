@@ -5,12 +5,13 @@ setActiveNav();
 
 const lastRefreshEl = document.getElementById("lastRefresh");
 const kpiOnline = document.getElementById("kpiOnline");
-const kpiOffline = document.getElementById("kpiOffline");
 const kpiPois = document.getElementById("kpiPois");
 const kpiNodes = document.getElementById("kpiNodes");
 const offlineNames = document.getElementById("offlineNames");
 const beaconRow = document.getElementById("beaconRow");
 const a11yAnnouncer = document.getElementById("a11yAnnouncer");
+const kpiController = document.getElementById("kpiController");
+const controllerLastSeen = document.getElementById("controllerLastSeen");
 
 // Track previous beacon states to detect changes
 let previousBeaconStates = new Map();
@@ -86,10 +87,24 @@ async function refresh(){
     const totalBeacons = beacons.length || 0;
 
     kpiOnline.textContent = `${online.length}/${totalBeacons}`;
-    kpiOffline.textContent = `${offline.length}`;
-    offlineNames.textContent = offline.length ? offline.map(b=>b.name).join(", ") : "None";
+    offlineNames.textContent = offline.length ? `Offline: ${offline.map(b=>b.name).join(", ")}` : "All online";
     kpiPois.textContent = `${pois.length}`;
     kpiNodes.textContent = `${nodes.length}`;
+    
+    // Calculate controller status from beacon heartbeats
+    // Controller is online if any beacon reported within the last minute
+    const now = new Date();
+    const oneMinuteAgo = new Date(now.getTime() - 60 * 1000);
+    const recentHeartbeats = beacons.filter(b => b.lastHeartbeatDate && b.lastHeartbeatDate > oneMinuteAgo);
+    const mostRecentHeartbeat = beacons
+      .filter(b => b.lastHeartbeatDate)
+      .sort((a, b) => b.lastHeartbeatDate - a.lastHeartbeatDate)[0];
+    
+    const controllerOnline = recentHeartbeats.length > 0;
+    const lastUpdate = mostRecentHeartbeat ? mostRecentHeartbeat.lastHeartbeatDate.toLocaleString() : "Never";
+    
+    kpiController.innerHTML = statusBadge(controllerOnline ? "online" : "offline");
+    controllerLastSeen.textContent = `Last update: ${lastUpdate}`;
 
     beaconRow.innerHTML = beacons.length 
       ? beacons.map(beaconMiniCard).join("")

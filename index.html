@@ -44,12 +44,6 @@
       <section class="card" style="grid-column: span 3;" aria-labelledby="beacons-online-heading">
         <h2 id="beacons-online-heading" class="h3-style">Beacons online</h2>
         <div class="kpi" id="kpiOnline" aria-live="polite" aria-atomic="true">-</div>
-        <div class="muted">Out of 3</div>
-      </section>
-
-      <section class="card" style="grid-column: span 3;" aria-labelledby="offline-beacons-heading">
-        <h2 id="offline-beacons-heading" class="h3-style">Offline beacons</h2>
-        <div class="kpi" id="kpiOffline" aria-live="polite" aria-atomic="true">-</div>
         <div class="muted" id="offlineNames" aria-live="polite">-</div>
       </section>
 
@@ -62,7 +56,13 @@
       <section class="card" style="grid-column: span 3;" aria-labelledby="total-nodes-heading">
         <h2 id="total-nodes-heading" class="h3-style">Total nodes</h2>
         <div class="kpi" id="kpiNodes" aria-live="polite" aria-atomic="true">-</div>
-        <div class="muted">Master + beacons</div>
+        <div class="muted">Total amount of beacons</div>
+      </section>
+
+      <section class="card" style="grid-column: span 3; display:flex; flex-direction:column;" aria-labelledby="controller-status-heading">
+        <h2 id="controller-status-heading" class="h3-style">Main Controller</h2>
+        <div id="kpiController" aria-live="polite" aria-atomic="true" style="margin:8px 0; flex-grow:1;">-</div>
+        <div class="muted" id="controllerLastSeen">Last update: -</div>
       </section>
 
       <section class="card" style="grid-column: span 12;" aria-labelledby="beacon-snapshot-heading">
