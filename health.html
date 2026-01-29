@@ -41,6 +41,8 @@
     </header>
 
     <div class="grid" role="region" aria-label="Beacon health status">
+      <!-- Uptime Stats Section -->
+    
       <section class="card" style="grid-column: span 12;" aria-labelledby="beacon-status-heading">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
           <h2 id="beacon-status-heading" style="margin:0;" class="h3-style">Beacon Status</h2>
@@ -49,6 +51,18 @@
           </div>
         </div>
         <div id="beaconList" class="grid" style="margin-top:12px;" role="list" aria-label="List of beacons" aria-live="polite"></div>
+      </section>
+        <section class="card" style="grid-column: span 12;" aria-labelledby="uptime-stats-heading">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <div>
+            <h2 id="uptime-stats-heading" style="margin:0;" class="h3-style">Uptime Statistics</h2>
+            <div class="muted">Based on outage log history</div>
+          </div>
+          <button class="btn secondary" id="btnResetStats" aria-label="Reset uptime statistics">Reset Stats</button>
+        </div>
+        <div id="uptimeStats" class="grid" style="margin-top:12px;" role="list" aria-label="Uptime statistics" aria-live="polite">
+          <div class="small" style="color:#b6c2e2;">Loading uptime data...</div>
+        </div>
       </section>
 
       <section class="card" style="grid-column: span 12;" aria-labelledby="outage-log-heading">
