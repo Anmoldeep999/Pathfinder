@@ -16,6 +16,15 @@ function announce(message) {
   }
 }
 
+// Sort beacons by their number (e.g., "Beacon 01" -> 1, "Beacon 02" -> 2)
+function sortBeaconsByNumber(beacons) {
+  return [...beacons].sort((a, b) => {
+    const numA = parseInt(a.name.match(/\d+/)?.[0] || "0", 10);
+    const numB = parseInt(b.name.match(/\d+/)?.[0] || "0", 10);
+    return numA - numB;
+  });
+}
+
 function renderBeaconCard(b){
   const iconClass = b.status || (b.online ? "online" : "offline");
   const badge = statusBadge(b.status);
@@ -46,7 +55,8 @@ async function renderLog(){
 
 async function refresh(){
   try {
-    const beacons = await getBeacons();
+    const beaconsRaw = await getBeacons();
+    const beacons = sortBeaconsByNumber(beaconsRaw);
     const online = beacons.filter(b => b.status === "online" || b.online).length;
     const offline = beacons.filter(b => b.status === "offline" || !b.online).length;
     

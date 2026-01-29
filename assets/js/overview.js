@@ -16,6 +16,15 @@ const controllerLastSeen = document.getElementById("controllerLastSeen");
 // Track previous beacon states to detect changes
 let previousBeaconStates = new Map();
 
+// Sort beacons by their number (e.g., "Beacon 01" -> 1, "Beacon 02" -> 2)
+function sortBeaconsByNumber(beacons) {
+  return [...beacons].sort((a, b) => {
+    const numA = parseInt(a.name.match(/\d+/)?.[0] || "0", 10);
+    const numB = parseInt(b.name.match(/\d+/)?.[0] || "0", 10);
+    return numA - numB;
+  });
+}
+
 // Announce to screen readers
 function announce(message) {
   if (a11yAnnouncer) {
@@ -81,7 +90,8 @@ function beaconMiniCard(b){
 
 async function refresh(){
   try {
-    const [beacons, pois, nodes] = await Promise.all([getBeacons(), getPois(), getNodes()]);
+    const [beaconsRaw, pois, nodes] = await Promise.all([getBeacons(), getPois(), getNodes()]);
+    const beacons = sortBeaconsByNumber(beaconsRaw);
     const online = beacons.filter(b => b.status === "online");
     const offline = beacons.filter(b => b.status === "offline");
     const totalBeacons = beacons.length || 0;
