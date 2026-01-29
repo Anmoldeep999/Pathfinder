@@ -24,7 +24,13 @@
 
     <div>
       <label for="password" style="display:block;margin-bottom:8px;font-weight:500;">Password</label>
-      <input id="password" type="password" autocomplete="current-password" required placeholder="Enter password" aria-required="true"/>
+      <div class="password-wrapper">
+        <input id="password" type="password" autocomplete="current-password" required placeholder="Enter password" aria-required="true"/>
+        <button type="button" class="password-toggle" aria-label="Show password" data-target="password">
+          <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+          <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+      </div>
     </div>
 
     <button type="submit" class="btn" style="width:100%;margin-top:8px;" aria-label="Log in to dashboard">Log in</button>
@@ -59,13 +65,25 @@
       
       <div>
         <label for="registerPassword" style="display:block;margin-bottom:8px;font-weight:500;">Password</label>
-        <input id="registerPassword" type="password" autocomplete="new-password" required placeholder="Create a password" aria-required="true" aria-describedby="passwordHelp"/>
+        <div class="password-wrapper">
+          <input id="registerPassword" type="password" autocomplete="new-password" required placeholder="Create a password" aria-required="true" aria-describedby="passwordHelp"/>
+          <button type="button" class="password-toggle" aria-label="Show password" data-target="registerPassword">
+            <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+            <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
         <span id="passwordHelp" class="small" style="display:block;margin-top:4px;">Password must be at least 8 characters</span>
       </div>
       
       <div>
         <label for="registerConfirmPassword" style="display:block;margin-bottom:8px;font-weight:500;">Confirm Password</label>
-        <input id="registerConfirmPassword" type="password" autocomplete="new-password" required placeholder="Confirm your password" aria-required="true"/>
+        <div class="password-wrapper">
+          <input id="registerConfirmPassword" type="password" autocomplete="new-password" required placeholder="Confirm your password" aria-required="true"/>
+          <button type="button" class="password-toggle" aria-label="Show password" data-target="registerConfirmPassword">
+            <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+            <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
       </div>
       
       <!-- reCAPTCHA widget -->
@@ -84,6 +102,28 @@
 <script src="assets/js/auth.js"></script>
 <script src="assets/js/login.js"></script>
 <script>
+  // Password visibility toggle
+  document.querySelectorAll('.password-toggle').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const targetId = this.getAttribute('data-target');
+      const input = document.getElementById(targetId);
+      const eyeOpen = this.querySelector('.eye-open');
+      const eyeClosed = this.querySelector('.eye-closed');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        eyeClosed.style.display = 'none';
+        eyeOpen.style.display = 'block';
+        this.setAttribute('aria-label', 'Hide password');
+      } else {
+        input.type = 'password';
+        eyeOpen.style.display = 'none';
+        eyeClosed.style.display = 'block';
+        this.setAttribute('aria-label', 'Show password');
+      }
+    });
+  });
+
   document.getElementById("forgotPasswordBtn").addEventListener("click", function() {
     const username = document.getElementById("username").value.trim();
     if (!username) {
