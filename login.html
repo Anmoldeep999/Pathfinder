@@ -6,6 +6,7 @@
   <title>Login - Project Pathfinder Dashboard</title>
   <link rel="stylesheet" href="assets/css/style.css"/>
   <script src="assets/js/accessibility-init.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 <!-- Skip link to login form -->
@@ -27,10 +28,55 @@
     </div>
 
     <button type="submit" class="btn" style="width:100%;margin-top:8px;" aria-label="Log in to dashboard">Log in</button>
-    <button type="button" class="btn secondary" style="width:100%;" id="forgotPasswordBtn" aria-label="Request password reset via email">Forgot Password</button>
+    <button type="button" class="btn secondary" style="width:100%;" id="createAccountBtn" aria-label="Create a new account">Create Account</button>
     <p id="error" role="alert" aria-live="assertive" style="color:var(--bad);margin:0;display:none;font-size:0.875rem;text-align:center;"></p>
   </form>
+  <a href="#" id="forgotPasswordBtn" class="small" style="display:block;text-align:center;margin-top:20px;color:var(--muted);text-decoration:underline;opacity:0.8;" aria-label="Request password reset via email">Forgot your password?</a>
 </main>
+
+<!-- Create Account Modal -->
+<div id="createAccountModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-heading" style="display:none;">
+  <div class="modal-content">
+    <button type="button" class="modal-close" id="closeModalBtn" aria-label="Close create account modal">&times;</button>
+    <h2 id="modal-heading">Create Account</h2>
+    <p class="small" style="margin-bottom:20px;">Fill in your details to create a new account</p>
+    
+    <form id="createAccountForm" style="display:grid;gap:16px;">
+      <div>
+        <label for="registerFullName" style="display:block;margin-bottom:8px;font-weight:500;">Full Name</label>
+        <input id="registerFullName" type="text" required placeholder="Enter your full name" aria-required="true"/>
+      </div>
+      
+      <div>
+        <label for="registerUsername" style="display:block;margin-bottom:8px;font-weight:500;">Username</label>
+        <input id="registerUsername" type="text" autocomplete="username" required placeholder="Choose a username" aria-required="true"/>
+      </div>
+      
+      <div>
+        <label for="registerEmail" style="display:block;margin-bottom:8px;font-weight:500;">Email Address</label>
+        <input id="registerEmail" type="email" autocomplete="email" required placeholder="Enter your email" aria-required="true"/>
+      </div>
+      
+      <div>
+        <label for="registerPassword" style="display:block;margin-bottom:8px;font-weight:500;">Password</label>
+        <input id="registerPassword" type="password" autocomplete="new-password" required placeholder="Create a password" aria-required="true" aria-describedby="passwordHelp"/>
+        <span id="passwordHelp" class="small" style="display:block;margin-top:4px;">Password must be at least 8 characters</span>
+      </div>
+      
+      <div>
+        <label for="registerConfirmPassword" style="display:block;margin-bottom:8px;font-weight:500;">Confirm Password</label>
+        <input id="registerConfirmPassword" type="password" autocomplete="new-password" required placeholder="Confirm your password" aria-required="true"/>
+      </div>
+      
+      <!-- reCAPTCHA widget -->
+      <div class="g-recaptcha" data-sitekey="6Lfw9FksAAAAAMxTV17jlVCymlbsNb18HV59ViaG" data-theme="dark"></div>
+      
+      <button type="submit" class="btn" style="width:100%;margin-top:8px;" aria-label="Create your account">Create Account</button>
+      <p id="registerError" role="alert" aria-live="assertive" style="color:var(--bad);margin:0;display:none;font-size:0.875rem;text-align:center;"></p>
+      <p id="registerSuccess" role="status" aria-live="polite" style="color:var(--good);margin:0;display:none;font-size:0.875rem;text-align:center;"></p>
+    </form>
+  </div>
+</div>
 
 <!-- Live region for accessibility announcements -->
 <div id="a11yAnnouncer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
@@ -59,6 +105,126 @@ Username: ${username}
 Thank you.`);
     
     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  });
+
+  // Create Account Modal functionality
+  const modal = document.getElementById("createAccountModal");
+  const createAccountBtn = document.getElementById("createAccountBtn");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const createAccountForm = document.getElementById("createAccountForm");
+  const registerErrorEl = document.getElementById("registerError");
+  const registerSuccessEl = document.getElementById("registerSuccess");
+
+  // Open modal
+  createAccountBtn.addEventListener("click", function() {
+    modal.style.display = "flex";
+    document.getElementById("registerFullName").focus();
+    document.body.style.overflow = "hidden";
+  });
+
+  // Close modal
+  function closeModal() {
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+    createAccountForm.reset();
+    registerErrorEl.style.display = "none";
+    registerSuccessEl.style.display = "none";
+    if (typeof grecaptcha !== "undefined") {
+      grecaptcha.reset();
+    }
+  }
+
+  closeModalBtn.addEventListener("click", closeModal);
+
+  // Close modal when clicking outside
+  modal.addEventListener("click", function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Close modal on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && modal.style.display === "flex") {
+      closeModal();
+    }
+  });
+
+  // Handle account creation form submission
+  createAccountForm.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    registerErrorEl.style.display = "none";
+    registerSuccessEl.style.display = "none";
+
+    const fullName = document.getElementById("registerFullName").value.trim();
+    const username = document.getElementById("registerUsername").value.trim();
+    const email = document.getElementById("registerEmail").value.trim();
+    const password = document.getElementById("registerPassword").value;
+    const confirmPassword = document.getElementById("registerConfirmPassword").value;
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      registerErrorEl.textContent = "Passwords do not match";
+      registerErrorEl.style.display = "block";
+      document.getElementById("registerConfirmPassword").focus();
+      return;
+    }
+
+    // Validate password length
+    if (password.length < 8) {
+      registerErrorEl.textContent = "Password must be at least 8 characters";
+      registerErrorEl.style.display = "block";
+      document.getElementById("registerPassword").focus();
+      return;
+    }
+
+    // Verify reCAPTCHA
+    const recaptchaResponse = grecaptcha.getResponse();
+    if (!recaptchaResponse) {
+      registerErrorEl.textContent = "Please complete the reCAPTCHA verification";
+      registerErrorEl.style.display = "block";
+      return;
+    }
+
+    const submitBtn = createAccountForm.querySelector("button[type=submit]");
+    
+    try {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Creating Account...";
+
+      const res = await fetch(`${API_BASE}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: fullName,
+          username: username,
+          email: email,
+          password: password,
+          recaptcha_token: recaptchaResponse
+        })
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || "Registration failed");
+      }
+
+      registerSuccessEl.textContent = "Account created successfully! You can now log in.";
+      registerSuccessEl.style.display = "block";
+      createAccountForm.reset();
+      grecaptcha.reset();
+
+      // Close modal after 2 seconds
+      setTimeout(closeModal, 2000);
+
+    } catch (err) {
+      registerErrorEl.textContent = err.message || "Failed to create account. Please try again.";
+      registerErrorEl.style.display = "block";
+      grecaptcha.reset();
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Create Account";
+    }
   });
 </script>
 </body>
