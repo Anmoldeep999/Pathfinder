@@ -22,6 +22,14 @@ function shouldShowWelcome() {
 
 // Create confetti effect
 function createConfetti() {
+  // Check if reduced motion is enabled
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches || 
+                        document.documentElement.classList.contains('reduced-motion');
+  
+  if (reducedMotion) {
+    return; // Skip confetti if reduced motion is enabled
+  }
+  
   const colors = ['#60a5fa', '#93c5fd', '#3b82f6', '#22c55e', '#f59e0b'];
   const confettiCount = 50;
   
@@ -33,15 +41,16 @@ function createConfetti() {
       confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
       confetti.style.animationDelay = Math.random() * 0.5 + 's';
       confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      confetti.style.top = '-10px'; // Start from top
       
       // Random shapes
       if (Math.random() > 0.5) {
         confetti.style.borderRadius = '50%';
       }
       
-      const popupContent = document.querySelector('.welcome-popup-content');
-      if (popupContent) {
-        popupContent.appendChild(confetti);
+      const popup = document.getElementById('welcomePopup');
+      if (popup) {
+        popup.appendChild(confetti);
         
         // Remove after animation
         setTimeout(() => {
