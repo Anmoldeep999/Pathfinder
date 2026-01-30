@@ -31,7 +31,10 @@ form.addEventListener("submit", async (e) => {
   }
 
   // Verify reCAPTCHA
-  const recaptchaResponse = grecaptcha.getResponse();
+  const loginWidgetId = window.recaptchaIds?.login;
+  const recaptchaResponse = typeof grecaptcha !== "undefined"
+    ? (typeof loginWidgetId === "number" ? grecaptcha.getResponse(loginWidgetId) : grecaptcha.getResponse())
+    : "";
   if (!recaptchaResponse) {
     errorEl.textContent = "Please complete the reCAPTCHA verification";
     errorEl.style.display = "block";
@@ -60,7 +63,9 @@ form.addEventListener("submit", async (e) => {
     // Focus the username field for retry
     document.getElementById("username").focus();
     // Reset reCAPTCHA on error
-    grecaptcha.reset();
+    if (typeof grecaptcha !== "undefined" && typeof loginWidgetId === "number") {
+      grecaptcha.reset(loginWidgetId);
+    }
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = "Log in";

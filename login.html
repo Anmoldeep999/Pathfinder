@@ -6,7 +6,35 @@
   <title>Login - Project Pathfinder Dashboard</title>
   <link rel="stylesheet" href="assets/css/style.css"/>
   <script src="assets/js/accessibility-init.js"></script>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script>
+    window.recaptchaIds = { login: null, register: null };
+    window.onRecaptchaLoad = function () {
+      const renderRecaptchas = () => {
+        const loginEl = document.getElementById("loginRecaptcha");
+        const registerEl = document.getElementById("registerRecaptcha");
+        if (!loginEl || !registerEl || typeof grecaptcha === "undefined") {
+          return;
+        }
+
+        window.recaptchaIds.login = grecaptcha.render(loginEl, {
+          sitekey: "6Lfw9FksAAAAAMxTV17jlVCymlbsNb18HV59ViaG",
+          theme: "dark"
+        });
+
+        window.recaptchaIds.register = grecaptcha.render(registerEl, {
+          sitekey: "6Lfw9FksAAAAAMxTV17jlVCymlbsNb18HV59ViaG",
+          theme: "dark"
+        });
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", renderRecaptchas, { once: true });
+      } else {
+        renderRecaptchas();
+      }
+    };
+  </script>
+  <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
 </head>
 <body>
 <!-- Skip link to login form -->
@@ -34,7 +62,7 @@
     </div>
 
     <!-- reCAPTCHA widget -->
-    <div class="g-recaptcha" data-sitekey="6Lfw9FksAAAAAMxTV17jlVCymlbsNb18HV59ViaG" data-theme="dark"></div>
+    <div id="loginRecaptcha" class="g-recaptcha"></div>
 
     <button type="submit" class="btn" style="width:100%;margin-top:8px;" aria-label="Log in to dashboard">Log in</button>
     <button type="button" class="btn secondary" style="width:100%;" id="createAccountBtn" aria-label="Create a new account">Create Account</button>
@@ -90,7 +118,7 @@
       </div>
       
       <!-- reCAPTCHA widget -->
-      <div class="g-recaptcha" data-sitekey="6Lfw9FksAAAAAMxTV17jlVCymlbsNb18HV59ViaG" data-theme="dark"></div>
+      <div id="registerRecaptcha" class="g-recaptcha"></div>
       
       <button type="submit" class="btn" style="width:100%;margin-top:8px;" aria-label="Create your account">Create Account</button>
       <p id="registerError" role="alert" aria-live="assertive" style="color:var(--bad);margin:0;display:none;font-size:0.875rem;text-align:center;"></p>
@@ -172,8 +200,9 @@ Thank you.`);
     createAccountForm.reset();
     registerErrorEl.style.display = "none";
     registerSuccessEl.style.display = "none";
-    if (typeof grecaptcha !== "undefined") {
-      grecaptcha.reset();
+    const registerWidgetId = window.recaptchaIds?.register;
+    if (typeof grecaptcha !== "undefined" && typeof registerWidgetId === "number") {
+      grecaptcha.reset(registerWidgetId);
     }
   }
 
@@ -222,7 +251,10 @@ Thank you.`);
     }
 
     // Verify reCAPTCHA
-    const recaptchaResponse = grecaptcha.getResponse();
+    const registerWidgetId = window.recaptchaIds?.register;
+    const recaptchaResponse = typeof grecaptcha !== "undefined"
+      ? (typeof registerWidgetId === "number" ? grecaptcha.getResponse(registerWidgetId) : grecaptcha.getResponse())
+      : "";
     if (!recaptchaResponse) {
       registerErrorEl.textContent = "Please complete the reCAPTCHA verification";
       registerErrorEl.style.display = "block";
@@ -255,7 +287,9 @@ Thank you.`);
       registerSuccessEl.textContent = "Account created successfully! You can now log in.";
       registerSuccessEl.style.display = "block";
       createAccountForm.reset();
-      grecaptcha.reset();
+      if (typeof grecaptcha !== "undefined" && typeof registerWidgetId === "number") {
+        grecaptcha.reset(registerWidgetId);
+      }
 
       // Close modal after 2 seconds
       setTimeout(closeModal, 2000);
@@ -263,7 +297,9 @@ Thank you.`);
     } catch (err) {
       registerErrorEl.textContent = err.message || "Failed to create account. Please try again.";
       registerErrorEl.style.display = "block";
-      grecaptcha.reset();
+      if (typeof grecaptcha !== "undefined" && typeof registerWidgetId === "number") {
+        grecaptcha.reset(registerWidgetId);
+      }
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = "Create Account";
