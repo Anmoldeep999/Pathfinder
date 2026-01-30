@@ -14,10 +14,13 @@ function isLoggedIn() {
   return !!getToken();
 }
 
-async function login(username, password) {
+async function login(username, password, recaptchaToken) {
   const formData = new URLSearchParams();
   formData.append("username", username);
   formData.append("password", password);
+  if (recaptchaToken) {
+    formData.append("recaptcha_token", recaptchaToken);
+  }
 
   const res = await fetch(`${API_BASE}/token`, {
     method: "POST",

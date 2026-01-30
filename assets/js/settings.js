@@ -155,6 +155,7 @@ function announce(message) {
 function handleSettingChange(settingName, isEnabled) {
   const currentSettings = loadSettings();
   currentSettings[settingName] = isEnabled;
+  saveSettings(currentSettings); // Save immediately
   applySettings(currentSettings);
   
   // Provide feedback
@@ -210,6 +211,10 @@ highContrastToggle.addEventListener("change", (e) => {
 
 reducedMotionToggle.addEventListener("change", (e) => {
   handleSettingChange("reducedMotion", e.target.checked);
+  // Reload page to properly apply/remove animations
+  setTimeout(() => {
+    location.reload();
+  }, 100);
 });
 
 largeTextToggle.addEventListener("change", (e) => {
