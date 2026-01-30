@@ -30,15 +30,26 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
+  // Verify reCAPTCHA
+  const recaptchaResponse = grecaptcha.getResponse();
+  if (!recaptchaResponse) {
+    errorEl.textContent = "Please complete the reCAPTCHA verification";
+    errorEl.style.display = "block";
+    return;
+  }
+
   try {
     submitBtn.disabled = true;
     submitBtn.textContent = "Logging in...";
     submitBtn.setAttribute("aria-busy", "true");
     announce("Logging in, please wait...");
 
-    await login(username, password);
+    await login(username, password, recaptchaResponse);
 
-    // Success - redirect to dashboard
+    // Success - set flag to show welcome popup
+    sessionStorage.setItem('pf_welcome_session', 'true');
+    
+    // Redirect to dashboard
     announce("Login successful. Redirecting to dashboard.");
     window.location.href = "index.html";
   } catch (err) {
@@ -48,6 +59,8 @@ form.addEventListener("submit", async (e) => {
     // Error element has role="alert" so it will be announced automatically
     // Focus the username field for retry
     document.getElementById("username").focus();
+    // Reset reCAPTCHA on error
+    grecaptcha.reset();
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = "Log in";

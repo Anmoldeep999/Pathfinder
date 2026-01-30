@@ -85,11 +85,25 @@
 <!-- Live region for accessibility announcements -->
 <div id="a11yAnnouncer" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
+<!-- Welcome Popup -->
+<div id="welcomePopup" class="welcome-popup" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+  <div class="welcome-popup-content">
+    <div class="welcome-popup-icon">👋</div>
+    <h2 id="welcome-title" class="welcome-popup-title">Welcome Back!</h2>
+    <p class="welcome-popup-name" id="welcomeName">Loading...</p>
+    <p class="welcome-popup-message">We're glad to see you again. Ready to manage your beacons?</p>
+    <button class="welcome-popup-button" id="welcomeCloseBtn" aria-label="Close welcome message">
+      Get Started
+    </button>
+  </div>
+</div>
+
 <script src="assets/js/auth.js"></script>
 <script>
   requireAuth();
 </script>
 
 <script type="module" src="assets/js/overview.js"></script>
+<script type="module" src="assets/js/welcome-popup.js"></script>
 </body>
 </html>

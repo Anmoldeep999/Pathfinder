@@ -1265,3 +1265,404 @@ html.high-contrast .modal-close:hover {
     transform-origin:center;
   }
 }
+
+/* =====================================================
+   WELCOME POPUP STYLES
+   ===================================================== */
+
+.welcome-popup {
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(0, 0, 0, 0.7);
+  backdrop-filter:blur(8px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10000;
+  animation:welcomeFadeIn 0.4s ease-out;
+}
+
+@keyframes welcomeFadeIn {
+  from { 
+    opacity:0;
+    backdrop-filter:blur(0px);
+  }
+  to { 
+    opacity:1;
+    backdrop-filter:blur(8px);
+  }
+}
+
+.welcome-popup-content {
+  background:linear-gradient(145deg, rgba(15,26,51,.98), rgba(16,31,61,.99));
+  border:2px solid var(--accent);
+  border-radius:24px;
+  padding:48px 40px;
+  max-width:500px;
+  width:90%;
+  position:relative;
+  box-shadow:0 30px 80px rgba(96,165,250,.3), 0 0 100px rgba(96,165,250,.2);
+  animation:welcomeSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align:center;
+}
+
+@keyframes welcomeSlideIn {
+  0% { 
+    opacity:0;
+    transform:scale(0.8) translateY(-30px) rotate(-2deg);
+  }
+  60% {
+    transform:scale(1.05) translateY(5px) rotate(1deg);
+  }
+  100% { 
+    opacity:1;
+    transform:scale(1) translateY(0) rotate(0deg);
+  }
+}
+
+.welcome-popup-icon {
+  width:80px;
+  height:80px;
+  margin:0 auto 24px;
+  background:linear-gradient(135deg, var(--accent), #93c5fd);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  animation:welcomeIconPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards;
+  box-shadow:0 8px 32px rgba(96,165,250,.4);
+  position:relative;
+}
+
+.welcome-popup-icon::before {
+  content:"";
+  position:absolute;
+  top:-4px;
+  left:-4px;
+  right:-4px;
+  bottom:-4px;
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--accent), #93c5fd);
+  opacity:0.3;
+  animation:welcomeIconPulse 2s ease-in-out infinite;
+  z-index:-1;
+}
+
+@keyframes welcomeIconPop {
+  0% { 
+    transform:scale(0) rotate(-180deg);
+    opacity:0;
+  }
+  70% {
+    transform:scale(1.15) rotate(10deg);
+  }
+  100% { 
+    transform:scale(1) rotate(0deg);
+    opacity:1;
+  }
+}
+
+@keyframes welcomeIconPulse {
+  0%, 100% { 
+    transform:scale(1);
+    opacity:0.3;
+  }
+  50% { 
+    transform:scale(1.2);
+    opacity:0.1;
+  }
+}
+
+.welcome-popup-title {
+  font-size:2rem;
+  font-weight:800;
+  margin:0 0 16px 0;
+  background:linear-gradient(90deg, var(--accent), #93c5fd, var(--text));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:welcomeTitleSlide 0.7s ease-out 0.4s backwards;
+  background-size:200% 100%;
+  animation:welcomeTitleSlide 0.7s ease-out 0.4s backwards, welcomeGradientShift 3s ease-in-out infinite;
+}
+
+@keyframes welcomeTitleSlide {
+  from { 
+    opacity:0;
+    transform:translateY(-20px);
+  }
+  to { 
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes welcomeGradientShift {
+  0%, 100% { background-position:0% 50%; }
+  50% { background-position:100% 50%; }
+}
+
+.welcome-popup-name {
+  font-size:1.5rem;
+  font-weight:700;
+  color:var(--text);
+  margin:0 0 12px 0;
+  animation:welcomeNameFade 0.8s ease-out 0.5s backwards;
+}
+
+@keyframes welcomeNameFade {
+  from { 
+    opacity:0;
+    transform:translateX(-20px);
+  }
+  to { 
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+.welcome-popup-message {
+  color:var(--muted);
+  font-size:1rem;
+  margin:0 0 32px 0;
+  line-height:1.6;
+  animation:welcomeMessageFade 0.8s ease-out 0.6s backwards;
+}
+
+@keyframes welcomeMessageFade {
+  from { 
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to { 
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.welcome-popup-button {
+  padding:14px 32px;
+  border-radius:12px;
+  border:2px solid var(--accent);
+  background:linear-gradient(135deg, rgba(96,165,250,.3), rgba(96,165,250,.4));
+  color:var(--text);
+  font-weight:700;
+  font-size:1rem;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  font-family:inherit;
+  animation:welcomeButtonBounce 0.8s ease-out 0.7s backwards;
+  position:relative;
+  overflow:hidden;
+}
+
+.welcome-popup-button::before {
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:0;
+  height:0;
+  border-radius:50%;
+  background:rgba(255,255,255,.2);
+  transform:translate(-50%, -50%);
+  transition:width 0.6s ease, height 0.6s ease;
+}
+
+.welcome-popup-button:hover::before {
+  width:300px;
+  height:300px;
+}
+
+.welcome-popup-button:hover {
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 12px 32px rgba(96,165,250,.4);
+  border-color:#93c5fd;
+}
+
+.welcome-popup-button:active {
+  transform:translateY(-1px) scale(1.02);
+}
+
+@keyframes welcomeButtonBounce {
+  0% { 
+    opacity:0;
+    transform:translateY(20px) scale(0.9);
+  }
+  60% {
+    transform:translateY(-5px) scale(1.05);
+  }
+  100% { 
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+/* Confetti effect */
+.welcome-confetti {
+  position:absolute;
+  width:10px;
+  height:10px;
+  background:var(--accent);
+  opacity:0;
+  animation:confettiFall 3s ease-in-out forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    opacity:1;
+    transform:translateY(-100px) rotate(0deg);
+  }
+  100% {
+    opacity:0;
+    transform:translateY(100vh) rotate(720deg);
+  }
+}
+
+/* Light theme welcome popup */
+html.theme-light .welcome-popup {
+  background:rgba(0, 0, 0, 0.4);
+}
+
+html.theme-light .welcome-popup-content {
+  background:linear-gradient(145deg, rgba(255,255,255,.99), rgba(248,250,252,.98));
+  border-color:#3b82f6;
+  box-shadow:0 30px 80px rgba(59,130,246,.3), 0 0 100px rgba(59,130,246,.15);
+}
+
+html.theme-light .welcome-popup-icon {
+  background:linear-gradient(135deg, #3b82f6, #60a5fa);
+  box-shadow:0 8px 32px rgba(59,130,246,.3);
+}
+
+html.theme-light .welcome-popup-icon::before {
+  background:linear-gradient(135deg, #3b82f6, #60a5fa);
+}
+
+html.theme-light .welcome-popup-title {
+  background:linear-gradient(90deg, #3b82f6, #1d4ed8, #1e293b);
+  -webkit-background-clip:text;
+  background-clip:text;
+}
+
+html.theme-light .welcome-popup-button {
+  border-color:#3b82f6;
+  background:linear-gradient(135deg, rgba(59,130,246,.2), rgba(59,130,246,.3));
+}
+
+html.theme-light .welcome-popup-button:hover {
+  box-shadow:0 12px 32px rgba(59,130,246,.3);
+  border-color:#1d4ed8;
+}
+
+/* Midnight theme welcome popup */
+html.theme-midnight .welcome-popup-content {
+  border-color:#8b5cf6;
+  box-shadow:0 30px 80px rgba(139,92,246,.3), 0 0 100px rgba(139,92,246,.2);
+}
+
+html.theme-midnight .welcome-popup-icon {
+  background:linear-gradient(135deg, #8b5cf6, #a78bfa);
+  box-shadow:0 8px 32px rgba(139,92,246,.4);
+}
+
+html.theme-midnight .welcome-popup-icon::before {
+  background:linear-gradient(135deg, #8b5cf6, #a78bfa);
+}
+
+html.theme-midnight .welcome-popup-title {
+  background:linear-gradient(90deg, #8b5cf6, #a78bfa, #e8e0f8);
+  -webkit-background-clip:text;
+  background-clip:text;
+}
+
+html.theme-midnight .welcome-popup-button {
+  border-color:#8b5cf6;
+  background:linear-gradient(135deg, rgba(139,92,246,.3), rgba(139,92,246,.4));
+}
+
+html.theme-midnight .welcome-popup-button:hover {
+  box-shadow:0 12px 32px rgba(139,92,246,.4);
+  border-color:#a78bfa;
+}
+
+/* High contrast welcome popup */
+html.high-contrast .welcome-popup-content {
+  background:#0a0a0a;
+  border:3px solid #00bfff;
+}
+
+html.high-contrast .welcome-popup-icon {
+  background:#00bfff;
+}
+
+html.high-contrast .welcome-popup-title {
+  -webkit-text-fill-color:#00bfff;
+}
+
+html.high-contrast .welcome-popup-button {
+  background:#000000;
+  border:3px solid #ffffff;
+  color:#ffffff;
+}
+
+html.high-contrast .welcome-popup-button:hover {
+  background:#ffffff;
+  color:#000000;
+}
+
+/* Reduced motion for welcome popup */
+html.reduced-motion .welcome-popup,
+html.reduced-motion .welcome-popup-content,
+html.reduced-motion .welcome-popup-icon,
+html.reduced-motion .welcome-popup-title,
+html.reduced-motion .welcome-popup-name,
+html.reduced-motion .welcome-popup-message,
+html.reduced-motion .welcome-popup-button {
+  animation:none !important;
+}
+
+html.reduced-motion .welcome-popup-icon::before {
+  animation:none !important;
+}
+
+html.reduced-motion .welcome-confetti {
+  display:none;
+}
+
+/* Responsive welcome popup */
+@media (max-width: 768px) {
+  .welcome-popup-content {
+    padding:36px 28px;
+    width:95%;
+  }
+  
+  .welcome-popup-icon {
+    width:64px;
+    height:64px;
+    font-size:32px;
+    margin-bottom:20px;
+  }
+  
+  .welcome-popup-title {
+    font-size:1.5rem;
+  }
+  
+  .welcome-popup-name {
+    font-size:1.25rem;
+  }
+  
+  .welcome-popup-message {
+    font-size:0.9rem;
+    margin-bottom:24px;
+  }
+  
+  .welcome-popup-button {
+    padding:12px 24px;
+    font-size:0.9rem;
+  }
+}
